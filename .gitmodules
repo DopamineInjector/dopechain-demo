@@ -1,0 +1,18 @@
+[submodule "dope-meta-server"]
+	path = dope-meta-server
+	url = https://github.com/DopamineInjector/dope-meta-server
+[submodule "dope-bloccy"]
+	path = dope-bloccy
+	url = https://github.com/DopamineInjector/dope-bloccy
+[submodule "dope-db"]
+	path = dope-db
+	url = https://github.com/DopamineInjector/dope-db
+[submodule "dopaminator-backend"]
+	path = dopaminator-backend
+	url = https://github.com/DopamineInjector/dopaminator-backend
+[submodule "dopaminator-frontend"]
+	path = dopaminator-frontend
+	url = https://github.com/DopamineInjector/dopaminator-frontend
+[submodule "dope-bootstrap"]
+	path = dope-bootstrap
+	url = https://github.com/DopamineInjector/dope-bootstrap
