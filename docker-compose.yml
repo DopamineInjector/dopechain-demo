@@ -10,6 +10,12 @@ services:
       - "5432:5432"
     networks:
       - dope-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d wallets"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   meta-server:
     build: ./dope-meta-server
     restart: always
@@ -19,6 +25,24 @@ services:
       - "8081:80"
     networks:
       - dope-net
+  db:
+    build: ./dope-db
+    restart: always
+    ports:
+      - "8082:42069"
+    networks: 
+      - dope-net
+  bloccy:
+    build: ./dope-bloccy
+    restart: always
+    ports:
+      - "8083:80"
+    networks: 
+      - dope-net
+    depends_on:
+      postgresql:
+        condition: service_healthy
+
 
 
 networks:
