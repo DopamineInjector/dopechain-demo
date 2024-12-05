@@ -21,6 +21,7 @@ services:
     restart: always
     environment:
       PORT: 80
+      STORAGE_PATH: "/data/"
     ports:
       - "8081:80"
     networks:
@@ -42,8 +43,18 @@ services:
     depends_on:
       postgresql:
         condition: service_healthy
-
-
+  bootstrap:
+    build: ./dope-bootstrap
+    restart: always
+    networks:
+      - dope-net
+  dope-node:
+    build: 
+      dockerfile: ./node.Dockerfile
+      context: .
+    restart: always
+    networks:
+      - dope-net
 
 networks:
   dope-net:
