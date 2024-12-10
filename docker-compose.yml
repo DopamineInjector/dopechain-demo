@@ -40,7 +40,7 @@ services:
       - ConnectionStrings__DefaultConnection=Host=backenddb;Port=5432;Database=dopaminatorDb;Username=admin;Password=admin
       - Blockchain__URL=http://bloccy:80
     ports:
-      - "5462:8080"
+      - "5264:8080"
 
   frontend:
     build: ./dopaminator-frontend
