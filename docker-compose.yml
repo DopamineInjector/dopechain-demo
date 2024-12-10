@@ -6,8 +6,6 @@ services:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: wallets
-    ports:
-      - "5432:5432"
     networks:
       - dope-net
     healthcheck:
@@ -16,38 +14,70 @@ services:
       timeout: 5s
       retries: 5
 
+  backenddb:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: dopaminatorDb
+    networks:
+      - dope-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d dopaminatorDb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./dopaminator-backend
+    depends_on:
+      backenddb:
+        condition: service_healthy
+    networks:
+      - dope-net
+    environment: 
+      - ConnectionStrings__DefaultConnection=Host=backenddb;Port=5432;Database=dopaminatorDb;Username=admin;Password=admin
+      - Blockchain__URL=http://bloccy:80
+    ports:
+      - "5462:8080"
+
+  frontend:
+    build: ./dopaminator-frontend
+    restart: always
+    ports:
+      - "8080:80"
+
   meta-server:
     build: ./dope-meta-server
     restart: always
     environment:
       PORT: 80
       STORAGE_PATH: "/data/"
-    ports:
-      - "8081:80"
     networks:
       - dope-net
+
   db:
     build: ./dope-db
     restart: always
-    ports:
-      - "8082:42069"
     networks: 
       - dope-net
+
   bloccy:
     build: ./dope-bloccy
     restart: always
-    ports:
-      - "8083:80"
     networks: 
       - dope-net
     depends_on:
       postgresql:
         condition: service_healthy
+
   bootstrap:
     build: ./dope-bootstrap
     restart: always
     networks:
       - dope-net
+
   dope-node:
     build: 
       dockerfile: ./node.Dockerfile
